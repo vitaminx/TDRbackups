@@ -1,13 +1,13 @@
 # TD网盘防翻车一键转存备份脚本
 
 ## 准备工作：
-1、申请一台VPS
-2、在VPS配置好gclone
+1、申请一台VPS    
+2、在VPS配置好gclone    
 3、准备好三个不同域的Google Team Drive，并记录下ID
 
 ## 安装步骤：
 
-1、ssh连接vps
+1、ssh连接vps    
 2、一键安装脚本
 
 ```
