@@ -26,9 +26,7 @@ fi
 
 echo 
 echo -e "\033[32m==<<TD网盘防翻车一键转存备份脚本.转存即将开始（转存一份、备份两份、共三份），可ctrl+c中途中断>>==\033[0m"
-id=$Copyfolderid
-j=$(gclone lsd remote:{$id} --dump bodies -vv 2>&1 | grep '^{"id"' | grep $id) CopyfolderName=$(echo $j | grep -Po '(?<="name":")[^"]*')
-echo "文件将转存入分类目录："$CopyfolderName/$rootName
+echo "文件将转存入以下："$rootName
 echo '转存日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'.txt'
 echo '查漏日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_check.txt'
 echo '去重日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_dedupe.txt'
@@ -42,39 +40,35 @@ echo -e
 
 echo -e "\033[32m==<<TD网盘防翻车一键转存备份脚本.备份一即将开始建立（转存一份、备份两份、共三份），可ctrl+c中途中断>>==\033[0m"
 if [[ ! -d "gclone lsd remote:{$Backupid1}" ]]; then
-	gclone mkdir "remote:{$Backupid1}/$CopyfolderName"
+	gclone mkdir "remote:{$Backupid1}/$rootName"
 else
-	echo "$CopyfolderName"
+	echo "$rootName"
 fi
-id=$Backupid1
-j=$(gclone lsd remote:{$id} --dump bodies -vv 2>&1 | grep '^{"id"' | grep $id) BackupCopyfolderName1=$(echo $j | grep -Po '(?<="name":")[^"]*')
-echo "备份一将存入分类目录："$BackupCopyfolderName1/$CopyfolderName/$rootName
+echo "备份一将存入以下文件夹："$rootName
 echo '备份一转存日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_backup1.txt'
 echo '备份一查漏日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_check_backup1.txt'
 echo '备份一去重日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_dedupe_backup1.txt'
 echo 【备份一开始建立】......
-gclone copy remote:{$link} "remote:{$Backupid1}/$CopyfolderName/$rootName" --drive-server-side-across-configs -vvP --transfers=20 --log-file=/root/AutoRclone/LOG/"$rootName"'_backup1.txt'
+gclone copy remote:{$link} "remote:{$Backupid1}/$rootName" --drive-server-side-across-configs -vvP --transfers=20 --log-file=/root/AutoRclone/LOG/"$rootName"'_backup1.txt'
 echo 【备份一查缺补漏】......
-gclone copy remote:{$link} "remote:{$Backupid1}/$CopyfolderName/$rootName" --drive-server-side-across-configs -vvP --transfers=40 --log-file=/root/AutoRclone/LOG/"$rootName"'_check_backup1.txt'
+gclone copy remote:{$link} "remote:{$Backupid1}/$rootName" --drive-server-side-across-configs -vvP --transfers=40 --log-file=/root/AutoRclone/LOG/"$rootName"'_check_backup1.txt'
 echo 【备份一去重检查】......
-gclone dedupe newest "remote:{$Backupid1}/$CopyfolderName/$rootName" --drive-server-side-across-configs -vvP --log-file=/root/AutoRclone/LOG/"$rootName"'_dedupe_backup1.txt'
+gclone dedupe newest "remote:{$Backupid1}/$rootName" --drive-server-side-across-configs -vvP --log-file=/root/AutoRclone/LOG/"$rootName"'_dedupe_backup1.txt'
 echo -e
 
 echo -e "\033[32m==<<TD网盘防翻车一键转存备份脚本.备份二即将开始建立（转存一份、备份两份、共三份），可ctrl+c中途中断>>==\033[0m"
 if [[ ! -d "gclone lsd remote:{$Backupid2}" ]]; then
-	gclone mkdir "remote:{$Backupid2}/$CopyfolderName"
+	gclone mkdir "remote:{$Backupid2}"
 else
-	echo "$CopyfolderName"
+	echo "
 fi
-id=$Backupid2
-j=$(gclone lsd remote:{$id} --dump bodies -vv 2>&1 | grep '^{"id"' | grep $id) BackupCopyfolderName2=$(echo $j | grep -Po '(?<="name":")[^"]*')
-echo "备份二将存入分类目录："$BackupCopyfolderName2/$CopyfolderName/$rootName
+echo "备份二将存入以下文件夹："$rootName
 echo '备份二转存日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_backup2.txt'
 echo '备份二查漏日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_check_backup2.txt'
 echo '备份二去重日志文件将保存在：/root/AutoRclone/LOG/'"$rootName"'_dedupe_backup2.txt'
 echo 【备份二开始建立】......
-gclone copy remote:{$link} "remote:{$Backupid2}/$CopyfolderName/$rootName" --drive-server-side-across-configs -vvP --transfers=20 --log-file=/root/AutoRclone/LOG/"$rootName"'_backup2.txt'
+gclone copy remote:{$link} "remote:{$Backupid2}/$rootName" --drive-server-side-across-configs -vvP --transfers=20 --log-file=/root/AutoRclone/LOG/"$rootName"'_backup2.txt'
 echo 【备份二查缺补漏】......
-gclone copy remote:{$link} "remote:{$Backupid2}/$CopyfolderName/$rootName" --drive-server-side-across-configs -vvP --transfers=40 --log-file=/root/AutoRclone/LOG/"$rootName"'_check_backup2.txt'
+gclone copy remote:{$link} "remote:{$Backupid2}/$rootName" --drive-server-side-across-configs -vvP --transfers=40 --log-file=/root/AutoRclone/LOG/"$rootName"'_check_backup2.txt'
 echo 【备份二去重检查】......
-gclone dedupe newest "remote:{$Backupid2}/$CopyfolderName/$rootName" --drive-server-side-across-configs -vvP --log-file=/root/AutoRclone/LOG/"$rootName"'_dedupe_backup2.txt'
+gclone dedupe newest "remote:{$Backupid2}/$rootName" --drive-server-side-across-configs -vvP --log-file=/root/AutoRclone/LOG/"$rootName"'_dedupe_backup2.txt'
